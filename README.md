@@ -20,10 +20,36 @@ Spring Security と Keycloak を使って、OAuth 2.0 / OpenID Connect の主要
 
 ## 動作環境
 
-- Java 21 以上（ビルドは同梱の Gradle Wrapper を使用）
-- Docker（Keycloak 用）
+- [mise](https://mise.jdx.dev/)（JDK のバージョン管理。`mise.toml` で Temurin 21 を指定）
+- Docker または containerd + nerdctl（Keycloak 用）
+
+Gradle は同梱の Gradle Wrapper（`./gradlew`）を使うのでインストール不要です。
 
 確認時のバージョン：Spring Boot 4.1.2（Spring Security 7）、Gradle 9.9.1、Keycloak 26.8.2（2026-11 時点）
+
+## Java のセットアップ（clone 後に 1 回）
+
+```bash
+# mise 本体のインストール（未導入の場合。公式手順: https://mise.jdx.dev/getting-started.html）
+curl https://mise.run | sh
+```
+
+```bash
+# シェル起動時に mise を有効化（bash の例。zsh なら ~/.zshrc に "zsh"）
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc && source ~/.bashrc
+```
+
+```bash
+# リポジトリ直下で実行：mise.toml を信頼し、JDK をインストール
+mise trust
+mise install
+```
+
+```bash
+java -version   # Temurin 21 が表示されれば OK（JAVA_HOME も自動設定される）
+```
+
+補足：`settings.gradle.kts` に Foojay Toolchains プラグインを入れているため、Gradle を動かす Java さえあれば、ビルド用の JDK 21 が見つからない場合は Gradle が自動でダウンロードします。
 
 テストのみ実行する場合：`./gradlew test`
 
@@ -31,7 +57,7 @@ Spring Security と Keycloak を使って、OAuth 2.0 / OpenID Connect の主要
 
 ```bash
 # 1. Keycloak を起動（realm・クライアント・ユーザーは自動インポート）
-docker compose up -d
+docker compose up -d        # containerd の場合: nerdctl compose up -d
 
 # 2. Resource Server を起動（別ターミナル）
 ./gradlew :resource-server:bootRun
@@ -139,6 +165,8 @@ curl -H "Authorization: Bearer <access_token>" http://localhost:8081/api/user
 - Spring Security Resource Server (JWT): https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
 - Keycloak Server Administration Guide: https://www.keycloak.org/docs/latest/server_admin/
 - Keycloak を Docker で起動: https://www.keycloak.org/getting-started/getting-started-docker
+- mise（Java）: https://mise.jdx.dev/lang/java.html
+- Gradle Toolchains: https://docs.gradle.org/current/userguide/toolchains.html
 - RFC 6749 (OAuth 2.0): https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7636 (PKCE): https://www.rfc-editor.org/rfc/rfc7636
 - OpenID Connect Core 1.0: https://openid.net/specs/openid-connect-core-1_0.html

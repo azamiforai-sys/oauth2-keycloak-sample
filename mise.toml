@@ -1,0 +1,4 @@
+# 開発ツールのバージョン定義（https://mise.jdx.dev/）
+# clone 後に `mise install` すると JDK が入り、このディレクトリでは JAVA_HOME / PATH が自動設定される
+[tools]
+java = "temurin-21"
