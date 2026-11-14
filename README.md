@@ -20,7 +20,7 @@ Spring Security と Keycloak を使って、OAuth 2.0 / OpenID Connect の主要
 
 ## 動作環境
 
-- [mise](https://mise.jdx.dev/)（JDK のバージョン管理。`mise.toml` で Temurin 21 を指定）
+- [mise](https://mise.jdx.dev/)（JDK のバージョン管理。`mise.toml` で Temurin 25 = 最新 LTS を指定）
 - Docker または containerd + nerdctl（Keycloak 用）
 
 Gradle は同梱の Gradle Wrapper（`./gradlew`）を使うのでインストール不要です。
@@ -46,10 +46,21 @@ mise install
 ```
 
 ```bash
-java -version   # Temurin 21 が表示されれば OK（JAVA_HOME も自動設定される）
+java -version   # Temurin 25 が表示されれば OK（JAVA_HOME も自動設定される）
 ```
 
-補足：`settings.gradle.kts` に Foojay Toolchains プラグインを入れているため、Gradle を動かす Java さえあれば、ビルド用の JDK 21 が見つからない場合は Gradle が自動でダウンロードします。
+JDK はホスト側（mise）で揃え、Gradle は検証だけを行います。
+
+- `build.gradle.kts` の toolchain で **Java 25 / Eclipse Adoptium（Temurin）** を要求
+- `gradle.properties` で JDK の自動検出・自動ダウンロードを無効化
+
+そのため mise 以外の JDK（別バージョンや別ベンダー）で `./gradlew` を実行すると、次のエラーで止まります。
+
+```
+Cannot find a Java installation on your machine ... matching: {languageVersion=25, vendor=Eclipse Temurin, ...}. Toolchain auto-provisioning is not enabled.
+```
+
+その場合は `mise install` 済みか、シェルで mise が有効か（`which java` が mise 配下を指すか）を確認してください。
 
 テストのみ実行する場合：`./gradlew test`
 

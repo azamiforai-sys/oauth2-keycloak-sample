@@ -12,8 +12,10 @@ subprojects {
     version = "0.0.1-SNAPSHOT"
 
     extensions.configure<JavaPluginExtension> {
+        // mise.toml と同じ JDK（Temurin 25）でなければビルドを止める
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.ADOPTIUM
         }
     }
 
