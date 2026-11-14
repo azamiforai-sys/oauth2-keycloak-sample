@@ -1,0 +1,14 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.2
+    container_name: oauth2-sample-keycloak
+    # start-dev: 学習用の開発モード（HTTP可・H2 DB）。本番では使わないこと。
+    # --import-realm: /opt/keycloak/data/import 配下の realm JSON を起動時に取り込む
+    command: ["start-dev", "--import-realm", "--http-port=8180"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8180"
+    volumes:
+      - ./keycloak/realm-oauth2-sample.json:/opt/keycloak/data/import/realm-oauth2-sample.json:ro

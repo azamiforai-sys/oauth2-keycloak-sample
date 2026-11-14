@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: resource-server
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 起動時に {issuer-uri}/.well-known/openid-configuration から jwks_uri を取得し、
+          # トークンの iss クレームがこの値と一致するかも検証する
+          issuer-uri: http://localhost:8180/realms/oauth2-sample
+          # aud クレームに sample-api が含まれないトークンは拒否する
+          # （Keycloak 側の Audience マッパーで付与している）
+          audiences: sample-api
+
+logging:
+  level:
+    org.springframework.security: INFO

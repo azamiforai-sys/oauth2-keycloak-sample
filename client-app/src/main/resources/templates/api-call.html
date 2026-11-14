@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>API 呼び出し</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<header>
+  <h1><a href="/">OAuth2 学習サンプル</a></h1>
+  <div th:if="${user != null}">
+    <span th:text="${user.preferredUsername}">user</span> さん
+    <form th:action="@{/logout}" method="post" style="display:inline"><button type="submit">ログアウト</button></form>
+  </div>
+</header>
+<h2>API 呼び出し結果</h2>
+<table>
+  <tr><th>リクエスト</th><td>GET http://localhost:8081<span th:text="${path}"></span></td></tr>
+  <tr><th>使用したトークン</th><td th:text="${registration == 'batch'} ? 'Client Credentials（batch-client 自身）' : 'Authorization Code（ログインユーザー）'"></td></tr>
+  <tr><th>ステータス</th><td th:class="'status-' + ${status}" th:text="${status}"></td></tr>
+</table>
+<pre th:text="${body}"></pre>
+<p><a href="/">← 戻る</a></p>
+</body>
+</html>

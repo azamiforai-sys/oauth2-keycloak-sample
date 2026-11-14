@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>トークン</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<header>
+  <h1><a href="/">OAuth2 学習サンプル</a></h1>
+  <div th:if="${user != null}">
+    <span th:text="${user.preferredUsername}">user</span> さん
+    <form th:action="@{/logout}" method="post" style="display:inline"><button type="submit">ログアウト</button></form>
+  </div>
+</header>
+<h2>アクセストークン（Resource Server に送るもの）</h2>
+<table>
+  <tr><th>scope</th><td th:text="${scopes}"></td></tr>
+  <tr><th>有効期限</th><td th:text="${expiresAt}"></td></tr>
+  <tr><th>リフレッシュトークン</th><td th:text="${hasRefreshToken} ? 'あり（期限切れ時に自動更新）' : 'なし'"></td></tr>
+</table>
+<h3>JWT ヘッダー</h3>
+<pre th:text="${accessTokenHeader}"></pre>
+<h3>JWT ペイロード（aud / realm_access.roles / azp に注目）</h3>
+<pre th:text="${accessTokenPayload}"></pre>
+<details><summary>エンコードされたままのアクセストークン</summary><pre class="token" th:text="${accessToken}"></pre></details>
+
+<h2>ID トークン（クライアントがユーザーを識別するためのもの）</h2>
+<pre th:text="${idTokenClaims}"></pre>
+
+<h2>UserInfo エンドポイントの応答</h2>
+<pre th:text="${userInfoClaims}"></pre>
+<p><a href="/">← 戻る</a></p>
+</body>
+</html>

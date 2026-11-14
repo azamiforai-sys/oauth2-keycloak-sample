@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: client-app
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            # Discovery（/.well-known/openid-configuration）で各エンドポイントを自動設定する
+            issuer-uri: http://localhost:8180/realms/oauth2-sample
+            user-name-attribute: preferred_username
+        registration:
+          # ① ユーザーとしてログインするクライアント（Authorization Code Grant + PKCE）
+          keycloak:
+            provider: keycloak
+            client-id: web-client
+            client-secret: web-client-secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            # openid を含めると OIDC（ID トークン発行）になる
+            scope: openid,profile,email
+          # ② ユーザーなしでクライアント自身として API を呼ぶ（Client Credentials Grant）
+          batch:
+            provider: keycloak
+            client-id: batch-client
+            client-secret: batch-client-secret
+            authorization-grant-type: client_credentials
+
+app:
+  resource-server:
+    base-url: http://localhost:8081
+
+logging:
+  level:
+    # OAuth2 のリダイレクトやトークン交換の様子を見たいときは DEBUG / TRACE に
+    org.springframework.security: INFO
