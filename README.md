@@ -20,10 +20,12 @@ Spring Security と Keycloak を使って、OAuth 2.0 / OpenID Connect の主要
 
 ## 動作環境
 
-- Java 21 以上
+- Java 21 以上（ビルドは同梱の Gradle Wrapper を使用）
 - Docker（Keycloak 用）
 
-確認時のバージョン：Spring Boot 4.1.2（Spring Security 7）、Keycloak 26.8.2（2026-11 時点）
+確認時のバージョン：Spring Boot 4.1.2（Spring Security 7）、Gradle 9.9.1、Keycloak 26.8.2（2026-11 時点）
+
+テストのみ実行する場合：`./gradlew test`
 
 ## 起動手順
 
@@ -32,10 +34,10 @@ Spring Security と Keycloak を使って、OAuth 2.0 / OpenID Connect の主要
 docker compose up -d
 
 # 2. Resource Server を起動（別ターミナル）
-./mvnw -pl resource-server spring-boot:run
+./gradlew :resource-server:bootRun
 
 # 3. Client アプリを起動（別ターミナル）
-./mvnw -pl client-app spring-boot:run
+./gradlew :client-app:bootRun
 ```
 
 両アプリは起動時に Keycloak の Discovery エンドポイントへ接続するため、**Keycloak を先に起動**してください。
