@@ -62,7 +62,7 @@ Cannot find a Java installation on your machine ... matching: {languageVersion=2
 
 その場合は `mise install` 済みか、シェルで mise が有効か（`which java` が mise 配下を指すか）を確認してください。
 
-テストのみ実行する場合：`./gradlew test`
+テストのみ実行する場合：`./gradlew test --console=plain`
 
 ## 起動手順
 
@@ -71,10 +71,10 @@ Cannot find a Java installation on your machine ... matching: {languageVersion=2
 docker compose up -d        # containerd の場合: nerdctl compose up -d
 
 # 2. Resource Server を起動（別ターミナル）
-./gradlew :resource-server:bootRun
+./gradlew :resource-server:bootRun --console=plain
 
 # 3. Client アプリを起動（別ターミナル）
-./gradlew :client-app:bootRun
+./gradlew :client-app:bootRun --console=plain
 ```
 
 両アプリは起動時に Keycloak の Discovery エンドポイントへ接続するため、**Keycloak を先に起動**してください。
